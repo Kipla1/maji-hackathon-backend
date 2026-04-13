@@ -38,18 +38,32 @@ def save_to_csv(payload, features):
         9. Include the rms (root mean square) value from the features dictionary.
     """
     file_exists = os.path.isfile(DATA_FILE)
+
+    fieldnames = [
+        "timestamp",
+        "device_id",
+        "rms",
+        "dominant_freq",
+        "peak_amplitude",
+        "variance",
+        "zero_crossing_rate",
+    ]
+
     with open(DATA_FILE, "a", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=[
-            "timestamp", "device_id", "dominant_freq", "rms"
-        ])
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
+
         writer.writerow({
             "timestamp": datetime.utcnow().isoformat(),
             "device_id": payload.get("device_id", "unknown"),
+            "rms": features["rms"],
             "dominant_freq": features["dominant_freq"],
-            "rms": features["rms"]
+            "peak_amplitude": features["peak_amplitude"],
+            "variance": features["variance"],
+            "zero_crossing_rate": features["zero_crossing_rate"],
         })
+
 
 def on_connect(client, userdata, flags, reason_code, properties):
     """
