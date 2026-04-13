@@ -20,7 +20,6 @@ for i in range(5):   # send 5 fake readings
         "vibration_data": list(np.random.normal(0, 0.5, 1000))
     }
     client.publish(TOPIC, json.dumps(payload))
-    save_to_csv(payload)
     print(f"📤 Sent reading {i+1}")
     time.sleep(2)
 
